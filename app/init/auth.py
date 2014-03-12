@@ -1,10 +1,11 @@
 #-----------------------------------------------
 # Define root folder and load base
 #-----------------------------------------------
-if not(defined('MAESTRANO_ROOT')):
-    define('MAESTRANO_ROOT', realpath(('%s/../../' % (dirname(XXX("MagicConstant('__FILE__', None)")),))))
+global MAESTRANO_ROOT
+if not(MAESTRANO_ROOT):
+    MAESTRANO_ROOT = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()) + '/../../'))
 
-require(('%s/app/init/base.php' % (MAESTRANO_ROOT,)), False)
+execfile(MAESTRANO_ROOT + '/app/init/base.py')
 
 #-----------------------------------------------
 # Require your app specific files here

@@ -1,6 +1,6 @@
 # Get full host (protocal + server host)
-protocol = ('https://' if (('HTTPS' in _SERVER) and (_SERVER['HTTPS'] != 'off')) else 'http://')
-full_host = ('%s%s' % (protocol, _SERVER['HTTP_HOST']))
+protocol = ('https://' if (('HTTPS' in os.environ['SERVER_PROTOCOL'])) else 'http://')
+full_host = protocol + os.environ['HTTP_HOST']
 
 # Name of your application
 mno_settings.app_name = 'my-app'
@@ -9,7 +9,7 @@ mno_settings.app_name = 'my-app'
 mno_settings.sso_enabled = True
 
 # SSO initialization URL
-mno_settings.sso_init_url = ('%s/maestrano/auth/saml/index.php' % (full_host,))
+mno_settings.sso_init_url = full_host + '/maestrano/auth/saml/index.php'
 
 # SSO processing url
-mno_settings.sso_return_url = ('%s/maestrano/auth/saml/consume.php' % (full_host,))
+mno_settings.sso_return_url = full_host + '/maestrano/auth/saml/consume.php'

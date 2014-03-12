@@ -1,11 +1,12 @@
 #-----------------------------------------------
 # Define root folder
 #-----------------------------------------------
-if not(defined('MAESTRANO_ROOT')):
-    define('MAESTRANO_ROOT', realpath(('%s/../../' % (dirname(XXX("MagicConstant('__FILE__', None)")),))))
+global MAESTRANO_ROOT
+if not(MAESTRANO_ROOT):
+    MAESTRANO_ROOT = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()) + '/../../'))
 
 #-----------------------------------------------
 # Load Libraries & Settings
 #-----------------------------------------------
-require(('%s/app/init/_lib_loader.php' % (MAESTRANO_ROOT,)), False)
-require(('%s/app/init/_config_loader.php' % (MAESTRANO_ROOT,)), False)
+execfile(MAESTRANO_ROOT + '/app/init/_lib_loader.py')
+execfile(MAESTRANO_ROOT + '/app/init/_config_loader.py')

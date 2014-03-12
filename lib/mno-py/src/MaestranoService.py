@@ -1,6 +1,6 @@
 
 
-class MaestranoService(object, ):
+class MaestranoService(object):
     _settings = None
     _instance = None
     _after_sso_sign_in_path = '/'
@@ -14,15 +14,15 @@ class MaestranoService(object, ):
     # Configure the service by assigning settings
     @classmethod
     def configure(cls, config_settings):
-        self._settings = config_settings
+        cls._settings = config_settings
     
     # Returns an instance of this class
     # (this class uses the singleton pattern)
     @classmethod
     def getInstance(cls):
-        if not((self._instance is not None)):
-            self._instance = self()
-        return self._instance
+        if not((cls._instance is not None)):
+            cls._instance = MaestranoService()
+        return cls._instance
 
     # Return the maestrano settings
     def getSettings(self):
@@ -30,7 +30,7 @@ class MaestranoService(object, ):
     
     # Return the maestrano sso session
     def getPhpSession(self):
-        return _SESSION
+        return "session"
 
     # Return the maestrano sso session
     def getSsoSession(self):
@@ -66,8 +66,4 @@ class MaestranoService(object, ):
 
     # Return the after sso signin path
     def getAfterSsoSignInPath(self):
-        if self.getPhpSession():
-            session = self.getPhpSession()
-            if ('mno_previous_url' in session):
-                return session['mno_previous_url']
         return self._after_sso_sign_in_path

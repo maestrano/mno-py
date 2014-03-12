@@ -33,20 +33,20 @@ class MnoSettings(object, ):
     sso_x509_certificate = ''
     
     # Specifies what format to return the identification token (Maestrano user UID)
-    sso_name_id_format = OneLogin_Saml_Settings::NAMEID_PERSISTENT;
+    sso_name_id_format = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
     
     # The Maestrano endpoint in charge of providing session information
     sso_session_check_url = ''
     
     # Return a settings object for php-saml
     def getSamlSettings(self):
-        settings = OneLogin_Saml_Settings()
-        
-        # Configure SAML
-        settings.idpSingleSignOnUrl = self.sso_url
-        settings.idpPublicCertificate = self.sso_x509_certificate
-        settings.spReturnUrl = self.sso_return_url
-        settings.spIssuer = self.app_name
-        settings.requestedNameIdFormat = self.sso_name_id_format
+        # Configure SAML Settings
+        settings = dict(
+            idp_sso_target_url = self.sso_url,
+            idp_cert_fingerprint = self.sso_x509_certificate,
+            assertion_consumer_service_url = self.sso_return_url,
+            issuer = self.app_name,
+            name_identifier_format = self.sso_name_id_format,
+        )
         
         return settings

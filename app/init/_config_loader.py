@@ -1,9 +1,14 @@
+from MnoSettings import MnoSettings
+from MaestranoService import MaestranoService
+
+global MAESTRANO_ROOT
+
 # Initialize mno_settings variable
 mno_settings = MnoSettings()
 
 # Require Config files
-require(('%s/app/config/1_app.php' % (MAESTRANO_ROOT,)), False)
-require(('%s/app/config/2_maestrano.php' % (MAESTRANO_ROOT,)), False)
+execfile(MAESTRANO_ROOT + '/app/config/1_app.py')
+execfile(MAESTRANO_ROOT + '/app/config/2_maestrano.py')
 
 # Configure Maestrano Service
 MaestranoService.configure(mno_settings)

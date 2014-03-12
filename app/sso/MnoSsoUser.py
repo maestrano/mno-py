@@ -1,9 +1,10 @@
+from MnoSsoBaseUser import MnoSsoBaseUser
 
 #
 # Configure App specific behavior for 
 # Maestrano SSO
 #
-class MnoSsoUser(MnoSsoBaseUser, ):
+class MnoSsoUser(MnoSsoBaseUser):
     # Database connection
     connection = None
     
@@ -15,5 +16,6 @@ class MnoSsoUser(MnoSsoBaseUser, ):
     #   about the user being authenticated
     #
     def __init__(self, saml_response, session=[], opts=[]):
-        parent.__construct(saml_response, session)
+        super(MnoSsoBaseUser,self).__init__(saml_response,session)
+        #parent.__construct(saml_response, session)
         self.connection = opts['db_connection']
