@@ -17,8 +17,6 @@ class MnoSsoUser(MnoSsoBaseUser):
     #
     def __init__(self, saml_response, session=[], opts=[]):
         super(MnoSsoUser,self).__init__(saml_response,session)
-        try:
+        if 'db_connection' in opts:
             self.connection = opts['db_connection']
-        except KeyError:
-            self.connection = None
         
