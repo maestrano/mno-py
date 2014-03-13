@@ -16,6 +16,9 @@ class MnoSsoUser(MnoSsoBaseUser):
     #   about the user being authenticated
     #
     def __init__(self, saml_response, session=[], opts=[]):
-        super(MnoSsoBaseUser,self).__init__(saml_response,session)
-        #parent.__construct(saml_response, session)
-        self.connection = opts['db_connection']
+        super(MnoSsoUser,self).__init__(saml_response,session)
+        try:
+            self.connection = opts['db_connection']
+        except KeyError:
+            self.connection = None
+        

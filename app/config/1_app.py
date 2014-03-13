@@ -9,7 +9,7 @@ mno_settings.app_name = 'my-app'
 mno_settings.sso_enabled = True
 
 # SSO initialization URL
-mno_settings.sso_init_url = full_host + '/maestrano/auth/saml/index.php'
+mno_settings.sso_init_url = full_host + '/maestrano/auth/saml/index.cgi'
 
 # SSO processing url
-mno_settings.sso_return_url = full_host + '/maestrano/auth/saml/consume.php'
+mno_settings.sso_return_url = full_host + '/maestrano/auth/saml/consume.cgi'

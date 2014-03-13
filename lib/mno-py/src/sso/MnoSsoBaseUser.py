@@ -1,3 +1,7 @@
+from datetime import datetime
+import dateutil.parser
+import json
+import sys
 
 # Properly format a User received from Maestrano 
 # SAML IDP
@@ -54,20 +58,16 @@ class MnoSsoBaseUser(object, ):
     
     # Construct the MnoSsoBaseUser object from a SAML response
     def __init__(self, saml_response, session=[]):
-        # First get the assertion attributes from the SAML
-        # response
-        assert_attrs = saml_response.getAttributes()
-        
         # Populate user attributes from assertions
         self.session = session
-        self.uid = assert_attrs['mno_uid'][0]
-        self.sso_session = assert_attrs['mno_session'][0]
-        self.sso_session_recheck = DateTime(assert_attrs['mno_session_recheck'][0])
-        self.name = assert_attrs['name'][0]
-        self.surname = assert_attrs['surname'][0]
-        self.email = assert_attrs['email'][0]
-        self.app_owner = (assert_attrs['app_owner'][0] == 'true')
-        self.organizations = json_decode(assert_attrs['organizations'][0], True)
+        self.uid = saml_response.get_assertion_attribute_value('mno_uid')[0]
+        self.sso_session = saml_response.get_assertion_attribute_value('mno_session')[0]
+        self.sso_session_recheck = dateutil.parser.parse(saml_response.get_assertion_attribute_value('mno_session_recheck')[0])
+        self.name = saml_response.get_assertion_attribute_value('name')[0]
+        self.surname = saml_response.get_assertion_attribute_value('surname')[0]
+        self.email = saml_response.get_assertion_attribute_value('email')[0]
+        self.app_owner = (saml_response.get_assertion_attribute_value('app_owner')[0] == 'true')
+        self.organizations = json.loads(saml_response.get_assertion_attribute_value('organizations')[0])
 
     # Try to find a local application user matching the sso one
     # using uid first, then email address.
@@ -107,31 +107,39 @@ class MnoSsoBaseUser(object, ):
             if self.local_id:
                 self.setLocalUid()
         return self.local_id
-
+    
+    
+    # Set user in session. Called by signIn method.
+    # This method should be overriden in MnoSsoUser to
+    # reflect the app specific way of putting an authenticated
+    # user in session.
+    def setInSession(self):
+        raise Exception('Function %s must be overriden in MnoSsoUser class!'% (sys._getframe().f_code.co_name))
+    
     # Create a local user based on the sso user
     # This method must be re-implemented in MnoSsoUser
     # (raise an error otherwise)
     def createLocalUser(self):
-        raise Exception(('Function %s must be overriden in MnoSsoUser class!' % (XXX("MagicConstant('__FUNCTION__', None)"),)))
+        raise Exception('Function %s must be overriden in MnoSsoUser class!'% (sys._getframe().f_code.co_name))
 
     
     # Get the ID of a local user via Maestrano UID lookup
     # This method must be re-implemented in MnoSsoUser
     # (raise an error otherwise)
     def getLocalIdByUid(self):
-        raise Exception(('Function %s must be overriden in MnoSsoUser class!' % (XXX("MagicConstant('__FUNCTION__', None)"),)))
+        raise Exception('Function %s must be overriden in MnoSsoUser class!'% (sys._getframe().f_code.co_name))
 
     # Get the ID of a local user via email lookup
     # This method must be re-implemented in MnoSsoUser
     # (raise an error otherwise)
     def getLocalIdByEmail(self):
-        raise Exception(('Function %s must be overriden in MnoSsoUser class!' % (XXX("MagicConstant('__FUNCTION__', None)"),)))
+        raise Exception('Function %s must be overriden in MnoSsoUser class!'% (sys._getframe().f_code.co_name))
 
     # Set the Maestrano UID on a local user via email lookup
     # This method must be re-implemented in MnoSsoUser
     # (raise an error otherwise)
     def setLocalUid(self):
-        raise Exception(('Function %s must be overriden in MnoSsoUser class!' % (XXX("MagicConstant('__FUNCTION__', None)"),)))
+        raise Exception('Function %s must be overriden in MnoSsoUser class!'% (sys._getframe().f_code.co_name))
 
     # Set all 'soft' details on the user (like name, surname, email)
     # This is a convenience method that must be implemented in
@@ -163,11 +171,3 @@ class MnoSsoBaseUser(object, ):
                 randomString = ('%s%s' % (randomString, characters[rand(0, (strlen(characters) - 1))]))
                 i = (i + 1)
         return randomString
-
-    
-    # Set user in session. Called by signIn method.
-    # This method should be overriden in MnoSsoUser to
-    # reflect the app specific way of putting an authenticated
-    # user in session.
-    def setInSession(self):
-        raise Exception(('Function %s must be overriden in MnoSsoUser class!' % (XXX("MagicConstant('__FUNCTION__', None)"),)))
