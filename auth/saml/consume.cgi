@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import inspect, os, sys, traceback, cgi
+import werkzeug
 
 print "Context-Type: text/html\n\n"
 
@@ -27,6 +28,8 @@ try:
     # Get SAML POST data
     auth_data = cgi.FieldStorage().getvalue('SAMLResponse')
     
+    #print os.environ.__dict__
+    basereq = werkzeug.wrappers.Request(os.environ.__dict__)
     
     # Build SAML response
     settings = maestrano.getSettings().getSamlSettings()
@@ -60,6 +63,8 @@ try:
 
 
 except Exception as inst:
-    print inst
-    print '<br/><br/><br/>'
-    print traceback.print_exc(file=sys.stdout)
+    #print inst
+    #print '<br/><br/><br/>'
+    #print traceback.print_exc(file=sys.stdout)
+    print 'There was an error during the authentication process.<br/>';
+    print 'Please try again. If issue persists please contact support@maestrano.com';
